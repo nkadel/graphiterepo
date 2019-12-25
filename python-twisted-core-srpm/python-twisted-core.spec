@@ -28,10 +28,10 @@ BuildRequires:  /bin/sed
 BuildRequires:  /bin/awk
 %if %{with_python2}
 BuildRequires:  python2-devel
+Requires:       python2-pyserial
 BuildRequires:  python2-zope-interface >= 3.0.1
 Requires:       python2-zope-interface
 Requires:       pyOpenSSL
-Requires:       pyserial
 %endif
 
 Obsoletes:      %{name}-zsh < 11.1.0-1
