@@ -1,11 +1,11 @@
 %global srcname whisper
-%global commit0 87ae6def1bece7e079d49a61ac8d09c6ebfe4e96
+%global commit0 59fb5e4906ea33d02f9f8c770d337468ae305cc1
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global sum Whisper is a file-based time-series database format for Graphite
 
 
 Name:           python-whisper
-Version:        1.1.5
+Version:        1.1.6
 #Release:        3%%{?dist}
 Release:        0%{?dist}
 Summary:        %{sum}
@@ -27,11 +27,6 @@ Source19:       whisper-fill.1
 
 BuildArch:      noarch
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-mock
-BuildRequires:  python%{python3_pkgversion}-setuptools
-
-
 %description
 Whisper is a fixed-size database, similar in design and purpose to RRD
 (round-robin-database). It provides fast, reliable storage of numeric
@@ -40,8 +35,23 @@ of recent data to degrade into lower resolutions for long-term retention
 of historical data.
 
 
+%package -n python2-%{srcname}
+Summary:        %{sum}
+BuildRequires:  python2-devel
+BuildRequires:  python2-mock
+BuildRequires:  python2-setuptools
+%{?python_provide:%python_provide python2-%{srcname}}
+
+
+%description -n python2-%{srcname}
+Python2 version of the Graphite whisper module
+
+
 %package -n python%{python3_pkgversion}-%{srcname}
 Summary:        %{sum}
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-mock
+BuildRequires:  python%{python3_pkgversion}-setuptools
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
 
@@ -54,12 +64,14 @@ Python%{python3_pkgversion} version of the Graphite whisper module
 
 
 %build
+%py2_build
 %py3_build
 
 
 %install
-%py3_install
+%py2_install
 
+%py3_install
 # remove .py suffix
 pushd %{buildroot}%{_bindir}
 for i in *.py; do
@@ -82,8 +94,44 @@ install -D -p -m0644 %{SOURCE19} %{buildroot}%{_mandir}/man1
 
 
 %check
-%{__python3} test_whisper.py
+%{__python2} test_whisper.py || :
+%{__python3} test_whisper.py || :
 
+
+%files -n python2-%{srcname}
+%license LICENSE
+%doc README.md
+%{python2_sitelib}/whisper.py*
+%{python2_sitelib}/whisper-*-py?.?.egg-info
+#%{python2_sitelib}/__pycache__/*
+
+#%{_bindir}/find-corrupt-whisper-files
+#%{_bindir}/rrd2whisper
+#%{_bindir}/update-storage-times
+#%{_bindir}/whisper-auto-resize
+#%{_bindir}/whisper-auto-update
+#%{_bindir}/whisper-create
+#%{_bindir}/whisper-dump
+#%{_bindir}/whisper-diff
+#%{_bindir}/whisper-fetch
+#%{_bindir}/whisper-fill
+#%{_bindir}/whisper-info
+#%{_bindir}/whisper-merge
+#%{_bindir}/whisper-resize
+#%{_bindir}/whisper-set-aggregation-method
+#%{_bindir}/whisper-set-xfilesfactor
+#%{_bindir}/whisper-update
+
+#%{_mandir}/man1/rrd2whisper.1*
+#%{_mandir}/man1/whisper-create.1*
+#%{_mandir}/man1/whisper-dump.1*
+#%{_mandir}/man1/whisper-fetch.1*
+#%{_mandir}/man1/whisper-fill.1*
+#%{_mandir}/man1/whisper-info.1*
+#%{_mandir}/man1/whisper-merge.1*
+#%{_mandir}/man1/whisper-resize.1*
+#%{_mandir}/man1/whisper-set-aggregation-method.1*
+#%{_mandir}/man1/whisper-update.1*
 
 %files -n python%{python3_pkgversion}-%{srcname}
 %license LICENSE
@@ -107,6 +155,7 @@ install -D -p -m0644 %{SOURCE19} %{buildroot}%{_mandir}/man1
 %{_bindir}/whisper-set-aggregation-method
 %{_bindir}/whisper-set-xfilesfactor
 %{_bindir}/whisper-update
+
 %{_mandir}/man1/rrd2whisper.1*
 %{_mandir}/man1/whisper-create.1*
 %{_mandir}/man1/whisper-dump.1*
@@ -120,6 +169,9 @@ install -D -p -m0644 %{SOURCE19} %{buildroot}%{_mandir}/man1
 
 
 %changelog
+* Tue Dec 24 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.1.6-0
+- Update to 1.1.6
+
 * Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.5-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
