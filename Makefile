@@ -1,49 +1,79 @@
 #
-# Makefile - build wrapper for carbon on CentPOS 7
+# Makefile - build wrapper for graphite on CentPOS 7
 #
 #	git clone RHEL 7 SRPM building tools from
 #	https://github.com/nkadel/[package] into designated
-#	CARBONPKGS below
+#	GRAPHITEPKGS below
 #
 #	Set up local 
 
 REPOBASE=file://$(PWD)
 #REPOBASE=http://localhost
 
-CARBONPKGS+=python-carbon-srpm
-CARBONPKGS+=python-whisper-srpm
+# Placeholder for non-python2-labeled packages
+EPELPKGS+=python2-pygments-srpm
+# EPEL 7 only
+EPELPKGS+=python-mistune-srpm
 
-REPOS+=carbonrepo/el/7
-REPOS+=carbonrepo/el/8
+EPELPKGS+=python-PyHamcrest-srpm
+EPELPKGS+=python-appdirs-srpm
+EPELPKGS+=python-cachetools-srpm
+EPELPKGS+=python-protobuf-srpm
+EPELPKGS+=python-pyserial-srpm
+EPELPKGS+=python-twisted-srpm
+EPELPKGS+=python-whisper-srpm
+EPELPKGS+=python-zope-interface-srpm
+
+EPELPKGS+=python-graphite-web-srpm
+
+GRAPHITEPKGS+=python-m2r-srpm
+GRAPHITEPKGS+=python-Automat-srpm
+
+GRAPHITEPKGS+=python-carbon-srpm
+
+#GRAPHITEPKGS+=python-twisted-core-srpm
+GRAPHITEPKGS+=python-twisted-srpm
+
+REPOS+=graphiterepo/el/7
+REPOS+=graphiterepo/el/8
+REPOS+=graphiterepo/fedora/30
+REPOS+=graphiterepo/fedora/31
 
 REPODIRS := $(patsubst %,%/x86_64/repodata,$(REPOS)) $(patsubst %,%/SRPMS/repodata,$(REPOS))
 
 # No local dependencies at build time
-CFGS+=carbonrepo-7-x86_64.cfg
-CFGS+=carbonrepo-8-x86_64.cfg
+CFGS+=graphiterepo-7-x86_64.cfg
+CFGS+=graphiterepo-8-x86_64.cfg
+CFGS+=graphiterepo-f31-x86_64.cfg
 
 # Link from /etc/mock
 MOCKCFGS+=epel-7-x86_64.cfg
 MOCKCFGS+=epel-8-x86_64.cfg
+MOCKCFGS+=fedora-31-x86_64.cfg
 
-all:: $(CFGS) $(MOCKCFGS)
-all:: $(REPODIRS)
-all:: $(CARBONPKGS)
 all:: install
+
+install:: $(REPODIRS)
+install:: $(EPELPKGS)
+install:: $(GRAPHITEPKGS)
+install:: $(CFGS) $(MOCKCFGS)
 
 .PHONY: build getsrc install clean
 build getsrc install clean::
-	@for name in $(CARBONPKGS); do \
+	@for name in $(GRAPHITEPKGS); do \
 	     (cd $$name; $(MAKE) $(MFLAGS) $@); \
 	done  
 
 # Dependencies
-python-carbon-srpm::
-python-whisper-srpm::
+#python-graphite-srpm::
+#python-whisper-srpm::
+
+.PHONY: epel
+epel:: $(EPELPKGS)
 
 # Actually build in directories
-.PHONY: $(CARBONPKGS)
-$(CARBONPKGS)::
+.PHONY: $(EPELPKGS) $(GRAPHITEPKGS)
+$(EPELPKGS) $(GRAPHITEPKGS)::
 	(cd $@; $(MAKE) $(MLAGS) install)
 
 repos: $(REPOS) $(REPODIRS)
@@ -59,16 +89,16 @@ $(REPODIRS): $(REPOS)
 .PHONY: cfg cfgs
 cfg cfgs:: $(CFGS) $(MOCKCFGS)
 
-carbonrepo-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
+graphiterepo-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
 	@echo Generating $@ from $?
 	@cat $? > $@
-	@sed -i 's/epel-7-x86_64/carbonrepo-7-x86_64/g' $@
+	@sed -i 's/epel-7-x86_64/graphiterepo-7-x86_64/g' $@
 	@echo >> $@
 	@echo "config_opts['yum.conf'] += \"\"\"" >> $@
-	@echo '[carbonrepo]' >> $@
-	@echo 'name=carbonrepo' >> $@
+	@echo '[graphiterepo]' >> $@
+	@echo 'name=graphiterepo' >> $@
 	@echo 'enabled=1' >> $@
-	@echo 'baseurl=file://$(PWD)/carbonrepo/el/7/x86_64/' >> $@
+	@echo 'baseurl=file://$(PWD)/graphiterepo/el/7/x86_64/' >> $@
 	@echo 'failovermethod=priority' >> $@
 	@echo 'skip_if_unavailable=False' >> $@
 	@echo 'metadata_expire=1' >> $@
@@ -76,16 +106,16 @@ carbonrepo-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
 	@echo '#cost=2000' >> $@
 	@echo '"""' >> $@
 
-carbonrepo-8-x86_64.cfg: /etc/mock/epel-8-x86_64.cfg
+graphiterepo-8-x86_64.cfg: /etc/mock/epel-8-x86_64.cfg
 	@echo Generating $@ from $?
 	@cat $? > $@
-	@sed -i 's/epel-8-x86_64/carbonrepo-8-x86_64/g' $@
+	@sed -i 's/epel-8-x86_64/graphiterepo-8-x86_64/g' $@
 	@echo >> $@
 	@echo "config_opts['yum.conf'] += \"\"\"" >> $@
-	@echo '[carbonrepo]' >> $@
-	@echo 'name=carbonrepo' >> $@
+	@echo '[graphiterepo]' >> $@
+	@echo 'name=graphiterepo' >> $@
 	@echo 'enabled=1' >> $@
-	@echo 'baseurl=file://$(PWD)/carbonrepo/el/8/x86_64/' >> $@
+	@echo 'baseurl=file://$(PWD)/graphiterepo/el/8/x86_64/' >> $@
 	@echo 'failovermethod=priority' >> $@
 	@echo 'skip_if_unavailable=False' >> $@
 	@echo 'metadata_expire=1' >> $@
@@ -93,16 +123,16 @@ carbonrepo-8-x86_64.cfg: /etc/mock/epel-8-x86_64.cfg
 	@echo '#cost=2000' >> $@
 	@echo '"""' >> $@
 
-carbonrepo-f30-x86_64.cfg: /etc/mock/fedora-30-x86_64.cfg
+graphiterepo-f31-x86_64.cfg: /etc/mock/fedora-31-x86_64.cfg
 	@echo Generating $@ from $?
 	@cat $? > $@
-	@sed -i 's/fedora-30-x86_64/carbonrepo-f30-x86_64/g' $@
+	@sed -i 's/fedora-31-x86_64/graphiterepo-f31-x86_64/g' $@
 	@echo >> $@
 	@echo "config_opts['yum.conf'] += \"\"\"" >> $@
-	@echo '[carbonrepo]' >> $@
-	@echo 'name=carbonrepo' >> $@
+	@echo '[graphiterepo]' >> $@
+	@echo 'name=graphiterepo' >> $@
 	@echo 'enabled=1' >> $@
-	@echo 'baseurl=file://$(PWD)/carbonrepo/fedora/30/x86_64/' >> $@
+	@echo 'baseurl=file://$(PWD)/graphiterepo/fedora/31/x86_64/' >> $@
 	@echo 'failovermethod=priority' >> $@
 	@echo 'skip_if_unavailable=False' >> $@
 	@echo 'metadata_expire=1' >> $@
@@ -114,8 +144,8 @@ carbonrepo-f30-x86_64.cfg: /etc/mock/fedora-30-x86_64.cfg
 $(MOCKCFGS)::
 	ln -sf --no-dereference /etc/mock/$@ $@
 
-repo: carbonrepo.repo
-carbonrepo.repo:: Makefile carbonrepo.repo.in
+repo: graphiterepo.repo
+graphiterepo.repo:: Makefile graphiterepo.repo.in
 	if [ -s /etc/fedora-release ]; then \
 		cat $@.in | \
 			sed "s|@REPOBASEDIR@/|$(PWD)/|g" | \
@@ -133,7 +163,7 @@ clean::
 	find . -name \*~ -exec rm -f {} \;
 	rm -f *.cfg
 	rm -f *.out
-	@for name in $(CARBONPKGS); do \
+	@for name in $(EPELPKGS) $(GRAPHITEPKGS); do \
 	    $(MAKE) -C $$name clean; \
 	done
 
@@ -141,4 +171,4 @@ distclean: clean
 	rm -rf $(REPOS)
 
 maintainer-clean: distclean
-	rm -rf $(CARBONPKGS)
+	rm -rf $(GRAPHITEPKGS)
