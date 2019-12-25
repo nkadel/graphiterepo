@@ -1,0 +1,33 @@
+From dc850da24d4024f33ba0b04c827f36cba9674911 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Mon, 27 May 2019 21:24:06 +0200
+Subject: [PATCH] Add support for positional only arguments
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+PEP 570 adds "positional only" arguments to Python, which changes the
+code object constructor. This adds support for Python 3.8.
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ automat/_introspection.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/automat/_introspection.py b/automat/_introspection.py
+index c7bbb8a..3f7307d 100644
+--- a/automat/_introspection.py
++++ b/automat/_introspection.py
+@@ -13,6 +13,9 @@ def copycode(template, changes):
+     ]
+     if hasattr(code, "co_kwonlyargcount"):
+         names.insert(1, "kwonlyargcount")
++    if hasattr(code, "co_posonlyargcount"):
++        # PEP 570 added "positional only arguments"
++        names.insert(1, "posonlyargcount")
+     values = [
+         changes.get(name, getattr(template, "co_" + name))
+         for name in names
+-- 
+2.21.0
+
