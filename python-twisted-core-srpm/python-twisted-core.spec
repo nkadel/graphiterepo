@@ -1,4 +1,5 @@
 %global pypi_name twisted-core
+%global fake_name Twisted
 
 %global with_python3 1
 %if 0%{?fedora} > 30 || 0%{?rhel} >= 8
@@ -31,6 +32,7 @@ BuildRequires:  python2-devel
 Requires:       python2-pyserial
 BuildRequires:  python2-zope-interface >= 3.0.1
 Requires:       python2-zope-interface
+#Requires:       python2-pyOpenSSL
 Requires:       pyOpenSSL
 %endif
 
