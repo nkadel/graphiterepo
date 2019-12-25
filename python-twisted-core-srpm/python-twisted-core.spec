@@ -24,11 +24,11 @@ Source1:        twisted-dropin-cache
 BuildRequires:  epel-rpm-macros
 %endif
 
+BuildRequires:  /bin/sed
+BuildRequires:  /bin/awk
 %if %{with_python2}
 BuildRequires:  python2-devel
 BuildRequires:  python2-zope-interface >= 3.0.1
-BuildRequires:  /bin/sed
-BuildRequires:  /bin/awk
 Requires:       python2-zope-interface
 Requires:       pyOpenSSL
 Requires:       pyserial
@@ -46,13 +46,6 @@ netnews, IRC, RDBMSs, desktop environments, and your toaster.
 
 Twisted Core is used by most of the servers, clients and protocols that are
 part of other Twisted projects.
-
-#%package doc
-#Summary:        Documentation for Twisted Core
-#Requires:       python-%{pypi_name} = %{version}-%{release}
-#
-#%description doc
-#Documentation for Twisted Core.
 
 %prep
 %setup -q -n TwistedCore-%{version}
@@ -82,11 +75,6 @@ rm -rf $RPM_BUILD_ROOT%{python2_sitearch}/twisted/internet/cfsupport
 # iocpreactor is a win32 reactor, so we can delete it
 rm -rf $RPM_BUILD_ROOT%{python2_sitearch}/twisted/internet/iocpreactor
 
-# Man pages
-#mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
-#cp -a doc/man/*.1 $RPM_BUILD_ROOT%{_mandir}/man1/
-#rm -rf doc/man
-
 # Some of the zsh completions are no longer appropriate
 find $RPM_BUILD_ROOT%{python2_sitearch}/twisted/python/zsh -size 0c -exec rm -f {} \;
 
@@ -97,7 +85,7 @@ install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_libexecdir}
 # Create an empty dropin.cache to be %%ghost-ed
 touch $RPM_BUILD_ROOT%{python2_sitearch}/twisted/plugins/dropin.cache
 
-# C files don't need to be packaged
+# C files do not need to be packaged
 rm -f $RPM_BUILD_ROOT%{python2_sitearch}/twisted/protocols/_c_urlarg.c
 rm -f $RPM_BUILD_ROOT%{python2_sitearch}/twisted/test/raiser.c
 
@@ -132,7 +120,6 @@ fi
 %{_bindir}/pyhtmlizer
 %{_bindir}/tap2deb
 %{_bindir}/tap2rpm
-#%{_bindir}/tapconvert
 %{_bindir}/trial
 %{_bindir}/twistd
 %{_libexecdir}/twisted-dropin-cache
@@ -160,9 +147,6 @@ fi
 %{python2_sitearch}/twisted/tap/
 %{python2_sitearch}/twisted/test/
 %{python2_sitearch}/twisted/trial/
-
-#%files doc
-#%doc doc/*
 
 %changelog
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 12.2.0-4
