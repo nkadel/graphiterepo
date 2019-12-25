@@ -2,6 +2,7 @@
 %global fake_name Twisted
 
 %global with_python3 1
+
 %if 0%{?fedora} > 30 || 0%{?rhel} >= 8
 %global with_python2 0
 %else
@@ -27,16 +28,6 @@ BuildRequires:  epel-rpm-macros
 
 BuildRequires:  /bin/sed
 BuildRequires:  /bin/awk
-%if %{with_python2}
-BuildRequires:  python2-devel
-Requires:       python2-pyserial
-BuildRequires:  python2-zope-interface >= 3.0.1
-Requires:       python2-zope-interface
-#Requires:       python2-pyOpenSSL
-Requires:       pyOpenSSL
-%endif
-
-Obsoletes:      %{name}-zsh < 11.1.0-1
 
 %description
 An extensible framework for Python programming, with special focus
@@ -48,6 +39,58 @@ netnews, IRC, RDBMSs, desktop environments, and your toaster.
 
 Twisted Core is used by most of the servers, clients and protocols that are
 part of other Twisted projects.
+
+%if %{with_python2}
+%package -n python2-%{pypi_name}
+Summary:        %{summary}
+%{?python_provide:%python_provide python2-%{pypi_name}}
+BuildRequires:  python2-devel
+BuildRequires:  python2-setuptools
+BuildRequires:  python2-devel
+Requires:       python2-pyserial
+BuildRequires:  python2-zope-interface >= 3.0.1
+Requires:       python2-zope-interface
+#Requires:       python2-pyOpenSSL
+Requires:       pyOpenSSL
+
+%description -n python2-%{pypi_name}
+An extensible framework for Python programming, with special focus
+on event-based network programming and multiprotocol integration.
+
+It is expected that one day the project will expanded to the point
+that the framework will seamlessly integrate with mail, web, DNS,
+netnews, IRC, RDBMSs, desktop environments, and your toaster.
+
+Twisted Core is used by most of the servers, clients and protocols that are
+part of other Twisted projects.
+
+Obsoletes:      %{name}-zsh < 11.1.0-1
+%endif # with_python2
+
+%if %{with_python3}
+%package -n python%{python3_pkgversion}-%{pypi_name}
+Summary:        %{summary}
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python%{python3_pkgversion}-devel
+Requires:       python%{python3_pkgversion}-pyserial
+BuildRequires:  python%{python3_pkgversion}-zope-interface >= 3.0.1
+Requires:       python%{python3_pkgversion}-zope-interface
+Requires:       python%{python3_pkgversion}-pyOpenSSL
+
+%description -n python%{python3_pkgversion}-%{pypi_name}
+An extensible framework for Python programming, with special focus
+on event-based network programming and multiprotocol integration.
+
+It is expected that one day the project will expanded to the point
+that the framework will seamlessly integrate with mail, web, DNS,
+netnews, IRC, RDBMSs, desktop environments, and your toaster.
+
+Twisted Core is used by most of the servers, clients and protocols that are
+part of other Twisted projects.
+
+%endif # with_python%{python3_pkgversion}
 
 %prep
 %setup -q -n TwistedCore-%{version}
@@ -65,11 +108,52 @@ for f in CREDITS LICENSE; do
 done
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" %{__python2} setup.py build
+%if %{with_python2}
+%{py2_build}
+%endif
+
+%if %{with_python3}
+%{py3_build}
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__python2} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+
+%if %{with_python3}
+%{py3_install}
+
+# cfsupport is support for MacOSX Core Foundations, so we can delete it
+rm -rf $RPM_BUILD_ROOT%{python3_sitearch}/twisted/internet/cfsupport
+
+# iocpreactor is a win32 reactor, so we can delete it
+rm -rf $RPM_BUILD_ROOT%{python3_sitearch}/twisted/internet/iocpreactor
+
+# Some of the zsh completions are no longer appropriate
+find $RPM_BUILD_ROOT%{python3_sitearch}/twisted/python/zsh -size 0c -exec rm -f {} \;
+
+# script to regenerate dropin.cache
+mkdir -p $RPM_BUILD_ROOT%{_libexecdir}
+install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_libexecdir}
+
+# Create an empty dropin.cache to be %%ghost-ed
+touch $RPM_BUILD_ROOT%{python3_sitearch}/twisted/plugins/dropin.cache
+
+# C files do not need to be packaged
+rm -f $RPM_BUILD_ROOT%{python3_sitearch}/twisted/protocols/_c_urlarg.c
+rm -f $RPM_BUILD_ROOT%{python3_sitearch}/twisted/test/raiser.c
+
+# Fix permissions of shared objects
+chmod 755 $RPM_BUILD_ROOT%{python3_sitearch}/twisted/test/raiser.so
+
+# See if there is any egg-info
+if [ -f $RPM_BUILD_ROOT%{python3_sitearch}/Twisted*.egg-info ]; then
+    echo $RPM_BUILD_ROOT%{python3_sitearch}/Twisted*.egg-info |
+        sed -e "s|^$RPM_BUILD_ROOT||"
+fi > egg-info-%{python3_pkgversion}
+%endif # with_python3
+
+%if %{with_python2}
+%{py2_install}
 
 # cfsupport is support for MacOSX Core Foundations, so we can delete it
 rm -rf $RPM_BUILD_ROOT%{python2_sitearch}/twisted/internet/cfsupport
@@ -98,7 +182,8 @@ chmod 755 $RPM_BUILD_ROOT%{python2_sitearch}/twisted/test/raiser.so
 if [ -f $RPM_BUILD_ROOT%{python2_sitearch}/Twisted*.egg-info ]; then
     echo $RPM_BUILD_ROOT%{python2_sitearch}/Twisted*.egg-info |
         sed -e "s|^$RPM_BUILD_ROOT||"
-fi > egg-info
+fi > egg-info-2
+%endif
 
 %check
 # trial twisted
@@ -107,24 +192,46 @@ fi > egg-info
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-%{_libexecdir}/twisted-dropin-cache || :
+%if %{with_python2}
+%post -n python2-%{pypi_name}
+%{_libexecdir}/twisted-dropin-cache-2 || :
 
-%preun
+%preun -n python2-%{pypi_name}
 if [ $1 -eq 0 ]; then
     # Complete removal, not upgrade, so remove plugins cache file
-    %{__rm} -f %{python2_sitearch}/twisted/plugins/dropin.cache || :
+    %{__rm} -f %{python2_sitearch}/twisted/plugins/dropin.cache-2 || :
 fi
+%endif # with_python2
 
-%files -f egg-info
+%if %{with_python3}
+%post -n python%{python3_pkgversion}-%{pypi_name}
+%{_libexecdir}/twisted-dropin-cache-%{python3_pkgversion} || :
+
+%preun -n python%{python3_pkgversion}-%{pypi_name}
+if [ $1 -eq 0 ]; then
+    # Complete removal, not upgrade, so remove plugins cache file
+    %{__rm} -f %{python3_sitearch}/twisted/plugins/dropin.cache-%{python3_pkgversion} || :
+fi
+%endif # with_python3
+
+%if %{with_python2}
+%files -n python2-%{pypi_name} -f egg-info-2
 %doc CREDITS LICENSE NEWS README
+%{_bindir}/manhole-2
+%{_bindir}/pyhtmlizer-2
+%{_bindir}/tap2deb-2
+%{_bindir}/tap2rpm-2
+%{_bindir}/trial-2
+%{_bindir}/twistd-2
+%if ! %{with_python3}
 %{_bindir}/manhole
 %{_bindir}/pyhtmlizer
 %{_bindir}/tap2deb
 %{_bindir}/tap2rpm
 %{_bindir}/trial
 %{_bindir}/twistd
-%{_libexecdir}/twisted-dropin-cache
+%endif
+%{_libexecdir}/twisted-dropin-cache-2
 %dir %{python2_sitearch}/twisted/
 %{python2_sitearch}/twisted/*.py*
 %{python2_sitearch}/twisted/application/
@@ -149,6 +256,49 @@ fi
 %{python2_sitearch}/twisted/tap/
 %{python2_sitearch}/twisted/test/
 %{python2_sitearch}/twisted/trial/
+%endif
+
+%if %{with_python3}
+%files -n python%{python3_pkgversion}-%{pypi_name} -f egg-info-%{python3_pkgersion}
+%doc CREDITS LICENSE NEWS README
+%{_bindir}/manhole-%{python_pkgvversion}
+%{_bindir}/pyhtmlizer-%{python_pkgvversion}
+%{_bindir}/tap2deb-%{python_pkgvversion}
+%{_bindir}/tap2rpm-%{python_pkgvversion}
+%{_bindir}/trial-%{python_pkgvversion}
+%{_bindir}/twistd-%{python_pkgvversion}
+%{_bindir}/manhole
+%{_bindir}/pyhtmlizer
+%{_bindir}/tap2deb
+%{_bindir}/tap2rpm
+%{_bindir}/trial
+%{_bindir}/twistd
+%{_libexecdir}/twisted-dropin-cache-%{python_pkgvversion}
+%dir %{python3_sitearch}/twisted/
+%{python3_sitearch}/twisted/*.py*
+%{python3_sitearch}/twisted/application/
+%{python3_sitearch}/twisted/cred/
+%{python3_sitearch}/twisted/enterprise/
+%{python3_sitearch}/twisted/internet/
+%{python3_sitearch}/twisted/logger/
+%{python3_sitearch}/twisted/manhole/
+%{python3_sitearch}/twisted/persisted/
+%dir %{python3_sitearch}/twisted/plugins/
+%{python3_sitearch}/twisted/plugins/*.py*
+%ghost %{python3_sitearch}/twisted/plugins/dropin.cache
+%{python3_sitearch}/twisted/positioning/
+%{python3_sitearch}/twisted/protocols/
+%{python3_sitearch}/twisted/python/
+%{python3_sitearch}/twisted/scripts/
+%dir %{python3_sitearch}/twisted/spread/
+%{python3_sitearch}/twisted/spread/*.py*
+%dir %{python3_sitearch}/twisted/spread/ui/
+%{python3_sitearch}/twisted/spread/ui/*.py*
+%{python3_sitearch}/twisted/spread/ui/*.glade
+%{python3_sitearch}/twisted/tap/
+%{python3_sitearch}/twisted/test/
+%{python3_sitearch}/twisted/trial/
+%endif
 
 %changelog
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 12.2.0-4
