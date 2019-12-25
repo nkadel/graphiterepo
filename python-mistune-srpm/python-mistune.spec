@@ -6,7 +6,8 @@ The fastest markdown parser in pure Python, inspired by marked.}
 
 Name:           python-mistune
 Version:        0.8.3
-Release:        6%{?dist}
+#Release:        6%%{?dist}
+Release:        0%{?dist}
 Summary:        Markdown parser for Python 
 
 License:        BSD
