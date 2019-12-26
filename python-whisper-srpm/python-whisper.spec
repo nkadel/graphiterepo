@@ -41,7 +41,10 @@ BuildRequires:  python2-devel
 BuildRequires:  python2-mock
 BuildRequires:  python2-setuptools
 %{?python_provide:%python_provide python2-%{srcname}}
-
+# Added for obsolete package name
+%{?python_provide:%python_provide python-%{srcname}}
+Obsoletes:      python-%{srcname} <= %{version}
+Conflicts:      python-%{srcname}
 
 %description -n python2-%{srcname}
 Python2 version of the Graphite whisper module
