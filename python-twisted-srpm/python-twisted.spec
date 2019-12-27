@@ -7,7 +7,8 @@ and more.}
 
 Name:           python-%{pypi_name}
 Version:        19.2.1
-Release:        4%{?dist}
+#Release:        4%%{?dist}
+Release:        0%{?dist}
 Summary:        Twisted is a networking engine written in Python
 
 License:        MIT
@@ -32,67 +33,71 @@ Summary:        %{summary}
 
 BuildRequires:  gcc
 BuildRequires:  python2-devel >= 2.6
-BuildRequires:  python2dist(appdirs) >= 1.4
-BuildRequires:  python2dist(automat) >= 0.3
-BuildRequires:  python2dist(attrs) >= 17.4
-BuildRequires:  python2dist(constantly) >= 15.1
-BuildRequires:  python2dist(cryptography) >= 2.5
-#BuildRequires:  (python2dist(h2) >= 3 with python2dist(h2) < 4)
-BuildRequires:  python2dist(h2) >= 3
-BuildRequires:  python2dist(hyperlink) >= 17.1.1
-BuildRequires:  python2dist(idna) >= 2.5
-BuildRequires:  python2dist(incremental) >= 16.10.1
-#BuildRequires:  (python2dist(priority) >= 1.1 with python2dist(priority) < 2)
-BuildRequires:  python2dist(priority) >= 1.1
-BuildRequires:  python2dist(pyasn1)
-BuildRequires:  python2dist(pyopenssl) >= 16
-BuildRequires:  python2dist(pyserial) >= 3
-BuildRequires:  python2dist(service-identity) >= 18.1
-BuildRequires:  python2dist(setuptools)
-BuildRequires:  python2dist(zope.interface) >= 4.4.2
-BuildRequires:  python2dist(pyhamcrest) >= 1.9
+BuildRequires:  python2-appdirs >= 1.4
+BuildRequires:  python2-automat >= 0.3
+BuildRequires:  python2-attrs >= 17.4
+BuildRequires:  python2-constantly >= 15.1
+BuildRequires:  python2-cryptography >= 2.5
+#BuildRequires:  (python2-h2 >= 3 with python2-h2 < 4)
+BuildRequires:  python2-h2 >= 3
+BuildRequires:  python2-hyperlink >= 17.1.1
+BuildRequires:  python2-idna >= 2.5
+BuildRequires:  python2-incremental >= 16.10.1
+#BuildRequires:  (python2-priority >= 1.1 with python2-priority < 2)
+BuildRequires:  python2-priority >= 1.1
+BuildRequires:  python2-pyasn1
+BuildRequires:  python2-pyopenssl >= 16
+BuildRequires:  python2-pyserial >= 3
+BuildRequires:  python2-service-identity >= 18.1
+BuildRequires:  python2-setuptools
+#BuildRequires:  python2-zope.interface >= 4.4.2
+BuildRequires:  python2-zope-interface >= 4.4.2
+#BuildRequires:  python2-pyhamcrest >= 1.9
+BuildRequires:  python2-PyHamcrest >= 1.9
 
 %if 0%{?fedora}
-Recommends:     python2dist(service-identity) >= 18.1
+Recommends:     python2-service-identity >= 18.1
 %endif
 
 %description -n python2-%{pypi_name}
 %{common_description}
 
 
-%package -n python3-%{pypi_name}
+%package -n python%{python3_pkgversion}-%{pypi_name}
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
 
 BuildRequires:  gcc
-BuildRequires:  python3-devel >= 3.3
-BuildRequires:  python3-Cython
-BuildRequires:  python3dist(appdirs) >= 1.4
-BuildRequires:  python3dist(automat) >= 0.3
-BuildRequires:  python3dist(attrs) >= 17.4
-BuildRequires:  python3dist(constantly) >= 15.1
-BuildRequires:  python3dist(cryptography) >= 2.5
-#BuildRequires:  (python3dist(h2) >= 3 with python3dist(h2) < 4)
-BuildRequires:  python3dist(h2) >= 3
-BuildRequires:  python3dist(hyperlink) >= 17.1.1
-BuildRequires:  python3dist(idna) >= 2.5
-BuildRequires:  python3dist(incremental) >= 16.10.1
-#BuildRequires:  (python3dist(priority) >= 1.1 with python3dist(priority) < 2)
-BuildRequires:  python3dist(priority) >= 1.1
-BuildRequires:  python3dist(pyasn1)
-BuildRequires:  python3dist(pyopenssl) >= 16
-BuildRequires:  python3dist(pyserial) >= 3
-BuildRequires:  python3dist(service-identity) >= 18.1
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(sphinx) >= 1.3.1
-BuildRequires:  python3dist(zope.interface) >= 4.4.2
-BuildRequires:  python3dist(pyhamcrest) >= 1.9
+BuildRequires:  python%{python3_pkgversion}-devel >= 3.3
+BuildRequires:  python%{python3_pkgversion}-Cython
+BuildRequires:  python%{python3_pkgversion}-appdirs >= 1.4
+BuildRequires:  python%{python3_pkgversion}-automat >= 0.3
+BuildRequires:  python%{python3_pkgversion}-attrs >= 17.4
+BuildRequires:  python%{python3_pkgversion}-constantly >= 15.1
+BuildRequires:  python%{python3_pkgversion}-cryptography >= 2.5
+#BuildRequires:  (python%{python3_pkgversion}-h2 >= 3 with python%{python3_pkgversion}-h2 < 4)
+BuildRequires:  python%{python3_pkgversion}-h2 >= 3
+BuildRequires:  python%{python3_pkgversion}-hyperlink >= 17.1.1
+BuildRequires:  python%{python3_pkgversion}-idna >= 2.5
+BuildRequires:  python%{python3_pkgversion}-incremental >= 16.10.1
+#BuildRequires:  (python%{python3_pkgversion}-priority >= 1.1 with python%{python3_pkgversion}-priority < 2)
+BuildRequires:  python%{python3_pkgversion}-priority >= 1.1
+BuildRequires:  python%{python3_pkgversion}-pyasn1
+BuildRequires:  python%{python3_pkgversion}-pyopenssl >= 16
+BuildRequires:  python%{python3_pkgversion}-pyserial >= 3
+BuildRequires:  python%{python3_pkgversion}-service-identity >= 18.1
+BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python%{python3_pkgversion}-sphinx >= 1.3.1
+#BuildRequires:  python%{python3_pkgversion}-zope.interface >= 4.4.2
+BuildRequires:  python%{python3_pkgversion}-zope-interface >= 4.4.2
+#BuildRequires:  python%{python3_pkgversion}-pyhamcrest >= 1.9
+BuildRequires:  python%{python3_pkgversion}-PyHamcrest >= 1.9
 
 %if 0%{?fedora}
-Recommends:     python3dist(service-identity) >= 18.1
+Recommends:     python%{python3_pkgversion}-service-identity >= 18.1
 %endif
 
-%description -n python3-%{pypi_name}
+%description -n python%{python3_pkgversion}-%{pypi_name}
 %{common_description}
 
 
@@ -186,7 +191,7 @@ PATH=%{buildroot}%{_bindir}:$PATH PYTHONPATH=%{buildroot}%{python3_sitearch} %{b
 %{python2_sitearch}/Twisted-%{version}-py?.?.egg-info
 
 
-%files -n python3-twisted
+%files -n python%{python3_pkgversion}-twisted
 %doc CONTRIBUTING NEWS.rst README.rst html
 %license LICENSE
 %{_bindir}/trial-3*
