@@ -1,0 +1,32 @@
+=========== README.fedora ===========
+
+
+Before starting the web application, you must perform the following steps.
+
+(1) Initialize the database:
+
+  # /usr/bin/django-admin migrate --settings=graphite.settings --run-syncdb --no-input
+
+(2) Build the index:
+
+  # /usr/bin/graphite-build-index
+
+(3) Change ownership:
+
+  # /usr/bin/chown -R apache:apache /var/lib/graphite-web
+
+(4) When running in Apache HTTPD with selinux enabled:
+
+  # /sbin/setsebool httpd_can_network_connect on
+  # /sbin/setsebool httpd_execmem on
+
+
+To run graphite-web with a prefixed path, e.g. /graphite
+
+(1) Set WSGIScriptAlias in /etc/httpd.conf.d/graphite-web.conf:
+
+  WSGIScriptAlias /graphite /usr/share/graphite/graphite-web.wsgi
+
+(2) Set STATIC_URL to match the path in /etc/graphite-web/local_settings.py:
+
+  STATIC_URL = '/graphite/static/'

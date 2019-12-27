@@ -1,0 +1,24 @@
+From a9fb23b765189d077bf682396ac0a9181da7e24e Mon Sep 17 00:00:00 2001
+From: Piotr Popieluch <piotr1212@gmail.com>
+Date: Mon, 26 Sep 2016 21:00:59 +0200
+Subject: [PATCH] Disable internal logrotateion
+
+---
+ webapp/graphite/local_settings.py.example | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/webapp/graphite/local_settings.py.example b/webapp/graphite/local_settings.py.example
+index 6f9e8d3..2350233 100644
+--- a/webapp/graphite/local_settings.py.example
++++ b/webapp/graphite/local_settings.py.example
+@@ -31,6 +31,7 @@
+ # These can also be configured using Django's LOGGING:
+ # https://docs.djangoproject.com/en/1.11/topics/logging/
+ #LOG_ROTATION = True
++LOG_ROTATION = False
+ #LOG_ROTATION_COUNT = 1
+ #LOG_RENDERING_PERFORMANCE = True
+ #LOG_CACHE_PERFORMANCE = True
+-- 
+2.7.4
+
