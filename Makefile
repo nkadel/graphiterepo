@@ -12,6 +12,7 @@ REPOBASE=file://$(PWD)
 
 # Placeholder for non-python2-labeled packages
 EPELPKGS+=python2-pygments-srpm
+EPELPKGS+=python2-setuptools_scm-srpm
 # EPEL 7 only
 EPELPKGS+=python-mistune-srpm
 
@@ -20,19 +21,22 @@ EPELPKGS+=python-appdirs-srpm
 EPELPKGS+=python-cachetools-srpm
 EPELPKGS+=python-protobuf-srpm
 EPELPKGS+=python-pyserial-srpm
-EPELPKGS+=python-twisted-srpm
 EPELPKGS+=python-whisper-srpm
 EPELPKGS+=python-zope-interface-srpm
 
-EPELPKGS+=python-graphite-web-srpm
-
+# Depends on python-mistune-srpm
 GRAPHITEPKGS+=python-m2r-srpm
 GRAPHITEPKGS+=python-Automat-srpm
+
+# Extremely demanding dependency
+GRAPHITEPKGS+=python-twisted-srpm
 
 GRAPHITEPKGS+=python-carbon-srpm
 
 #GRAPHITEPKGS+=python-twisted-core-srpm
 GRAPHITEPKGS+=python-twisted-srpm
+
+GRAPHITEPKGS+=python-graphite-web-srpm
 
 REPOS+=graphiterepo/el/7
 REPOS+=graphiterepo/el/8
@@ -65,8 +69,13 @@ build getsrc install clean::
 	done  
 
 # Dependencies
-#python-graphite-srpm::
-#python-whisper-srpm::
+python-m2r-srpm:: python2-pygments-srpm
+python-m2r-srpm:: python-mistune-srpm
+
+python-Automat-srpm:: python-m2r-srpm
+python-Automat-srpm:: python-setuptools-scm-srpm
+
+python-twisted-srpm:: python-Automat-srpm
 
 .PHONY: epel
 epel:: $(EPELPKGS)

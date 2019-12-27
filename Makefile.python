@@ -11,16 +11,16 @@ RSYNCOPTS=-a --no-owner --no-group
 RSYNCSAFEOPTS=$(RSYNCOPTS) --ignore-existing 
 
 # "mock" configurations to build with, activate only as needed
-MOCKS+=fedora-30-x86_64
-# Some RHEL dependencies are supplied locally in py2packrepo
+#MOCKS+=fedora-31-x86_64
+# Some RHEL dependencies are supplied locally in graphiterepo
 #MOCKS+=epel-8-x86_64
-# Some RHEL dependencies are supplied locally in py2packrepo
-MOCKS+=py2packrepo-7-x86_64
-MOCKS+=py2packrepo-8-x86_64
-#MOCKS+=py2packrepo-f30-x86_64
+# Some RHEL dependencies are supplied locally in graphiterepo
+MOCKS+=graphiterepo-7-x86_64
+MOCKS+=graphiterepo-8-x86_64
+#MOCKS+=graphiterepo-f31-x86_64
 
 # Local yum compatible RPM repository
-REPOBASEDIR="`/bin/pwd | xargs dirname`/py2packrepo"
+REPOBASEDIR="`/bin/pwd | xargs dirname`/graphiterepo"
 
 # Deduce local package names and .spec files, for universe Makefile use
 SPEC := `ls *.spec | head -1`
