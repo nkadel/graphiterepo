@@ -36,13 +36,6 @@ Patch2:         %{name}-0.9.13-Fix-path-to-storage-schemas.conf.patch
 
 BuildArch:      noarch
 
-BuildRequires:  python%{python3_pkgversion}-cachetools
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-mock
-BuildRequires:  python%{python3_pkgversion}-protobuf
-BuildRequires:  python%{python3_pkgversion}-twisted
-BuildRequires:  python%{python3_pkgversion}-whisper
-
 BuildRequires:    systemd
 
 
@@ -54,8 +47,15 @@ a storage back-end.
 
 %package -n python%{python3_pkgversion}-%{srcname}
 Summary:        %{sum}
+BuildRequires:  python%{python3_pkgversion}-cachetools
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-mock
+BuildRequires:  python%{python3_pkgversion}-protobuf
+BuildRequires:  python%{python3_pkgversion}-twisted
+BuildRequires:  python%{python3_pkgversion}-whisper
+
 Requires:       python%{python3_pkgversion}-cachetools
-#Requires:       python%{python3_pkgversion}-twisted
+Requires:       python%{python3_pkgversion}-twisted
 Requires:       python%{python3_pkgversion}-twisted-core
 Requires:       python%{python3_pkgversion}-protobuf
 Requires:       python%{python3_pkgversion}-six
