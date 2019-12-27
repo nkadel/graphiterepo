@@ -57,14 +57,14 @@ MOCKCFGS+=fedora-31-x86_64.cfg
 
 all:: install
 
+install:: $(CFGS) $(MOCKCFGS)
 install:: $(REPODIRS)
 install:: $(EPELPKGS)
 install:: $(GRAPHITEPKGS)
-install:: $(CFGS) $(MOCKCFGS)
 
 .PHONY: build getsrc install clean
 build getsrc install clean::
-	@for name in $(GRAPHITEPKGS); do \
+	@for name in $(EPELPKGS) $(GRAPHITEPKGS); do \
 	     (cd $$name; $(MAKE) $(MFLAGS) $@); \
 	done  
 

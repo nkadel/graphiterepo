@@ -13,11 +13,8 @@ RSYNCSAFEOPTS=$(RSYNCOPTS) --ignore-existing
 # "mock" configurations to build with, activate only as needed
 #MOCKS+=fedora-31-x86_64
 # Some RHEL dependencies are supplied locally in graphiterepo
+#MOCKS+=epel-7-x86_64
 #MOCKS+=epel-8-x86_64
-# Some RHEL dependencies are supplied locally in graphiterepo
-#MOCKS+=graphiterepo-7-x86_64
-MOCKS+=graphiterepo-8-x86_64
-#MOCKS+=graphiterepo-f31-x86_64
 
 # Local yum compatible RPM repository
 REPOBASEDIR="`/bin/pwd | xargs dirname`/graphiterepo"
@@ -90,8 +87,6 @@ install:: $(MOCKS)
 	done
 
 clean::
-	rm -rf $(MOCKS)
-	rm -rf rpmbuild
 	rm -rf */
 	rm -f *.rpm
 	rm -f *~
