@@ -18,13 +18,6 @@
 %global with_python2 1
 %endif
 
-# Older RHEL does not use dnf, does not support "Suggests"
-%if 0%{?fedora} || 0%{?rhel} > 7
-%global with_dnf 1
-%else
-%global with_dnf 0
-%endif
-
 %global pypi_name PyHamcrest
 
 # Common SRPM package
@@ -66,13 +59,7 @@ License:        New BSD (FIXME:No SPDX)
 
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
-# requires stanza of py2pack
-# install_requires stanza of py2pack
-%if %{with_dnf}
-%endif # with_dnf
 %{?python_provide:%python_provide python2-%{pypi_name}}
-# Add portability hooks
-%{?python_provide:%python_provide python2-pyhamcrest}
 
 %description -n python2-%{pypi_name}
 PyHamcrest is a framework for writing matcher objects, allowing you to
@@ -101,13 +88,9 @@ Url:            https://github.com/hamcrest/PyHamcrest
 Summary:        Hamcrest framework for matcher objects
 License:        New BSD (FIXME:No SPDX)
 
-# requires stanza of py2pack
-# install_requires stanza of py2pack
-%if %{with_dnf}
-%endif # with_dnf
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
-# Add portability hooks
-%{?python_provide:%python_provide python%{python3_pkgversion}-pyhamcrest}
 
 %description -n python%{python3_pkgversion}-%{pypi_name}
 PyHamcrest is a framework for writing matcher objects, allowing you to
