@@ -55,7 +55,8 @@ a storage back-end.
 %package -n python%{python3_pkgversion}-%{srcname}
 Summary:        %{sum}
 Requires:       python%{python3_pkgversion}-cachetools
-Requires:       python%{python3_pkgversion}-twisted
+#Requires:       python%{python3_pkgversion}-twisted
+Requires:       python%{python3_pkgversion}-twisted-core
 Requires:       python%{python3_pkgversion}-protobuf
 Requires:       python%{python3_pkgversion}-six
 Requires:       python%{python3_pkgversion}-whisper >= %{version}
