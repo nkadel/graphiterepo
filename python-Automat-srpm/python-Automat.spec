@@ -1,11 +1,7 @@
 # what it's called on pypi
-%global srcname Automat
+%global pypi_name Automat
 # what it's imported as
 %global libname automat
-# name of egg info directory
-%global eggname %{srcname}
-# package name fragment
-%global pkgname %{srcname}
 
 %global common_description %{expand:
 Automat is a library for concise, idiomatic Python expression of finite-state
@@ -14,7 +10,7 @@ automata (particularly deterministic finite-state transducers).}
 %bcond_with  tests
 %bcond_without  python2
 
-Name:           python-%{pkgname}
+Name:           python-%{pypi_name}
 Version:        0.7.0
 Release:        3.1%{?dist}
 Summary:        Self-service finite-state machines for the programmer on the go
@@ -38,15 +34,18 @@ BuildRequires:  epel-rpm-macros
 
 
 %if %{with python2}
-%package -n     python2-%{pkgname}
+%package -n     python2-%{pypi_name}
 Summary:        %{summary}
 Provides:       python2-%{libname}
-%{?python_provide:%python_provide python2-%{pkgname}}
+%{?python_provide:%python_provide python2-%{pypi_name}}
+# Added for misnamed packages
+%{?python_provide:%python_provide python2-%{libname}}
 
 BuildRequires:  python2-devel
 BuildRequires:  python2-m2r
 BuildRequires:  python2-setuptools
-BuildRequires:  python2-setuptools-scm
+#BuildRequires:  python2-setuptools-scm
+BuildRequires:  python2-setuptools_scm
 %if %{with tests}
 BuildRequires:  python2-pytest
 BuildRequires:  python2-attrs >= 16.1
@@ -55,19 +54,22 @@ BuildRequires:  python2-six
 BuildRequires:  python2-twisted >= 16.1.1
 %endif
 
-%description -n python2-%{pkgname} %{common_description}
+%description -n python2-%{pypi_name} %{common_description}
 %endif
 
 
-%package -n     python%{python3_pkgversion}-%{pkgname}
+%package -n     python%{python3_pkgversion}-%{pypi_name}
 Summary:        %{summary}
 Provides:       python%{python3_pkgversion}-%{libname}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pkgname}}
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
+# Added for misnamed packages
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{libname}}
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-m2r
 BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-setuptools-scm
+#BuildRequires:  python%{python3_pkgversion}-setuptools-scm
+BuildRequires:  python%{python3_pkgversion}-setuptools_scm
 %if %{with tests}
 BuildRequires:  python%{python3_pkgversion}-pytest
 BuildRequires:  python%{python3_pkgversion}-attrs >= 16.1
@@ -76,13 +78,13 @@ BuildRequires:  python%{python3_pkgversion}-six
 BuildRequires:  python%{python3_pkgversion}-twisted >= 16.1.1
 %endif
 
-%description -n python%{python3_pkgversion}-%{pkgname} %{common_description}
+%description -n python%{python3_pkgversion}-%{pypi_name} %{common_description}
 
 
 %prep
-%autosetup  -p1 -n %{srcname}-%{version}
+%autosetup  -p1 -n %{pypi_name}-%{version}
 # Remove bundled egg-info
-rm -rf %{eggname}.egg-info
+rm -rf %{pypi_name}.egg-info
 
 
 %build
@@ -112,23 +114,26 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} pytest-%{python3_version} --verbose au
 
 
 %if %{with python2}
-%files -n python2-%{pkgname}
+%files -n python2-%{pypi_name}
 %license LICENSE
 %doc README.md
 %{python2_sitelib}/%{libname}
-%{python2_sitelib}/%{eggname}-%{version}-py%{python2_version}.egg-info
+%{python2_sitelib}/%{pypi_name}-%{version}-py%{python2_version}.egg-info
 %endif
 
 
-%files -n python%{python3_pkgversion}-%{pkgname}
+%files -n python%{python3_pkgversion}-%{pypi_name}
 %license LICENSE
 %doc README.md
 %{_bindir}/automat-visualize
 %{python3_sitelib}/%{libname}
-%{python3_sitelib}/%{eggname}-%{version}-py%{python3_version}.egg-info
+%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
 
 
 %changelog
+* Wed Dec 25 2019 Nico Kadel-Garcia <nkadel@gmail.com>
+- Reset python-setuptools-scm to python-setuptools_scm dependency
+
 * Mon Jul 22 2019 Stephen Smoogen <smooge@fedora00.int.smoogespace.com> - 0.7.0-3.1
 - Bootstrap version
 
