@@ -1,8 +1,8 @@
-%global srcname appdirs
+%global pypi_name appdirs
 %bcond_without wheel
-%global wheelname %{srcname}-%{version}-py2.py3-none-any.whl
+%global wheelname %{pypi_name}-%{version}-py2.py3-none-any.whl
 
-Name:          python-%{srcname}
+Name:          python-%{pypi_name}
 Version:       1.4.3
 #Release:       8%%{?dist}
 Release:       0%{?dist}
@@ -21,9 +21,9 @@ BuildRequires: epel-rpm-macros
 A small Python module for determining appropriate " + " platform-specific
 directories, e.g. a "user data dir".
 
-%package -n python2-%{srcname}
+%package -n python2-%{pypi_name}
 Summary:        %{summary}
-%{?python_provide:%python_provide python2-%{srcname}}
+%{?python_provide:%python_provide python2-%{pypi_name}}
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 %if %{with wheel}
@@ -31,13 +31,13 @@ BuildRequires:  python2-pip
 BuildRequires:  python2-wheel
 %endif
 
-%description -n python2-%{srcname}
+%description -n python2-%{pypi_name}
 A small Python 2 module for determining appropriate " + " platform-specific
 directories, e.g. a "user data dir".
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n python%{python3_pkgversion}-%{pypi_name}
 Summary:        %{summary}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-setuptools
 %if %{with wheel}
@@ -45,13 +45,13 @@ BuildRequires:  python%{python3_pkgversion}-pip
 BuildRequires:  python%{python3_pkgversion}-wheel
 %endif
 
-%description -n python%{python3_pkgversion}-%{srcname}
+%description -n python%{python3_pkgversion}-%{pypi_name}
 A small Python 3 module for determining appropriate " + " platform-specific
 directories, e.g. a "user data dir".
 
 %prep
-%autosetup -n %{srcname}-%{version}
-rm -vrf %{srcname}.egg-info
+%autosetup -n %{pypi_name}-%{version}
+rm -vrf %{pypi_name}.egg-info
 
 %build
 %if %{with wheel}
@@ -71,22 +71,22 @@ rm -vrf %{srcname}.egg-info
   %py3_install
 %endif
 
-sed -i -e '1{\@^#!/usr/bin/env python@d}' %{buildroot}{%{python2_sitelib},%{python3_sitelib}}/%{srcname}.py
+sed -i -e '1{\@^#!/usr/bin/env python@d}' %{buildroot}{%{python2_sitelib},%{python3_sitelib}}/%{pypi_name}.py
 
 %check
 %{__python2} setup.py test
 %{__python3} setup.py test
 
-%files -n python2-%{srcname}
+%files -n python2-%{pypi_name}
 %license LICENSE.txt
 %doc README.rst CHANGES.rst
-%{python2_sitelib}/%{srcname}*
+%{python2_sitelib}/%{pypi_name}*
 
-%files -n python%{python3_pkgversion}-%{srcname}
+%files -n python%{python3_pkgversion}-%{pypi_name}
 %license LICENSE.txt
 %doc README.rst CHANGES.rst
-%{python3_sitelib}/%{srcname}*
-%{python3_sitelib}/__pycache__/%{srcname}.*
+%{python3_sitelib}/%{pypi_name}*
+%{python3_sitelib}/__pycache__/%{pypi_name}.*
 
 %changelog
 * Wed Dec 25 2019 Nico Kadel-Garcia <nkadel@gmail.com>
