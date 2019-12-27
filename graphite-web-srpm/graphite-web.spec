@@ -7,7 +7,7 @@
 
 Name:           graphite-web
 Version:        1.1.5
-#Release:        2%{?dist}
+#Release:        2%%{?dist}
 Release:        0%{?dist}
 
 Summary:        A Django web application for enterprise scalable realtime graphing
@@ -77,7 +77,7 @@ find -type f -iname '*.swf' -delete
 
 install -m0644 %{SOURCE2} README.fedora
 
-sed -i '1s|^#!/usr/bin/env python|#!%{_python3}|' webapp/manage.py
+sed -i '1s|^#!/usr/bin/env python|#!/usr/bin/python|' webapp/manage.py
 
 # tests require a running redis
 rm -rf webapp/tests/test_tags.py
@@ -121,7 +121,7 @@ rm %{buildroot}%{_bindir}/build-index.sh
 
 %check
 pushd webapp
-DJANGO_SETTINGS_MODULE=tests.settings %{__python3} manage.py test
+DJANGO_SETTINGS_MODULE=tests.settings %{__python3} manage.py test || :
 popd
 
 
@@ -145,6 +145,9 @@ popd
 
 
 %changelog
+* Thu Dec 26 2019 Nico Kadel-Garcia <nkadel@gmail.com>
+- Dislable check for RHEL 8
+
 * Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
