@@ -71,17 +71,17 @@ Protocol Buffers are Google's data interchange format
 %endif # with_python2
 
 %if %{with_python3}
-%package -n python%{python3_pkgversion}-%{pypi_name}
+%package -n python3-%{pypi_name}
 Version:        3.11.2
 Release:        0%{?dist}
 Url:            https://developers.google.com/protocol-buffers/
 Summary:        Protocol Buffers
 License:        3-Clause BSD License (FIXME:No SPDX)
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-six >= 1.9
-%description -n python%{python3_pkgversion}-%{pypi_name}
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-six >= 1.9
+%description -n python3-%{pypi_name}
 Protocol Buffers are Google's data interchange format
 
 %endif # with_python3
@@ -117,7 +117,7 @@ rm -rf %{buildroot}
 %endif # with_python2
 
 %if %{with_python3}
-%files -n python%{python3_pkgversion}-%{pypi_name}
+%files -n python3-%{pypi_name}
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
 %endif # with_python3

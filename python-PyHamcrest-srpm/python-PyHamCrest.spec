@@ -81,18 +81,18 @@ to the behaviour are made.
 %endif # with_python2
 
 %if %{with_python3}
-%package -n python%{python3_pkgversion}-%{pypi_name}
+%package -n python3-%{pypi_name}
 Version:        1.9.0
 Release:        0%{?dist}
 Url:            https://github.com/hamcrest/PyHamcrest
 Summary:        Hamcrest framework for matcher objects
 License:        New BSD (FIXME:No SPDX)
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
+%description -n python3-%{pypi_name}
 PyHamcrest is a framework for writing matcher objects, allowing you to
 declaratively define "match" rules. There are a number of situations where
 matchers are invaluable, such as UI validation, or data filtering, but it is in
@@ -142,7 +142,7 @@ rm -rf %{buildroot}
 %endif # with_python2
 
 %if %{with_python3}
-%files -n python%{python3_pkgversion}-%{pypi_name}
+%files -n python3-%{pypi_name}
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
 %endif # with_python3

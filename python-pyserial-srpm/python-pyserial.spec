@@ -58,21 +58,21 @@ Python Serial Port Extension for Win32, OSX, Linux, BSD, Jython, IronPython
 %endif # with_python2
 
 %if %{with_python3}
-%package -n python%{python3_pkgversion}-%{pypi_name}
+%package -n python3-%{pypi_name}
 Version:        3.4
 Release:        0%{?dist}
 Url:            https://github.com/pyserial/pyserial
 Summary:        Python Serial Port Extension
 License:        BSD
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 # Old misnamed python2 package
 Obsoletes:      pyserial <= %{version}
 Provides:       pyserial = %{version}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
+%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
+%description -n python3-%{pypi_name}
 Python Serial Port Extension for Win32, OSX, Linux, BSD, Jython, IronPython
 
 %endif # with_python3
@@ -118,7 +118,7 @@ rm -rf %{buildroot}
 %endif # with_python2
 
 %if %{with_python3}
-%files -n python%{python3_pkgversion}-%{pypi_name}
+%files -n python3-%{pypi_name}
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
 %{_bindir}/miniterm.py-%{python3_version}

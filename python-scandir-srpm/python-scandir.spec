@@ -43,8 +43,8 @@ BuildRequires:  python-unittest2
 %endif
 
 %if %{with python3}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 %endif
 
 %if 0%{?with_python3_other}
@@ -69,11 +69,11 @@ Summary:        %{sum}
 
 # Python 3 package
 %if %{with python3}
-%package -n     python%{python3_pkgversion}-%{pypi_name}
+%package -n     python3-%{pypi_name}
 Summary:        %{sum}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
+%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
+%description -n python3-%{pypi_name}
 %{desc}
 %endif
 
@@ -147,7 +147,7 @@ rm -rf test/testdir
 %endif
 
 %if %{with python3}
-%files -n python%{python3_pkgversion}-%{pypi_name}
+%files -n python3-%{pypi_name}
 %license LICENSE*
 %doc README* benchmark.py
 

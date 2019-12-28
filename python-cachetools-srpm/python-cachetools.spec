@@ -11,10 +11,6 @@ URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source}
 
 BuildArch:      noarch
-%if 0%{?rhel} > 0
-BuildRequires:	epel-rpm-macros
-%endif
-
 
 %global _description\
 This module provides various memoizing collections and decorators,\
@@ -28,12 +24,12 @@ and method calls.\
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n python3-%{srcname}
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+BuildRequires:  python3-devel
+%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python%{python3_pkgversion}-%{srcname} %_description
+%description -n python3-%{srcname} %_description
 
 %prep
 %autosetup -n %{srcname}-%{version}
@@ -47,7 +43,7 @@ BuildRequires:  python%{python3_pkgversion}-devel
 %check
 %{__python3} setup.py test
 
-%files -n python%{python3_pkgversion}-%{srcname}
+%files -n python3-%{srcname}
 %license LICENSE
 %doc CHANGES.rst PKG-INFO README.rst
 %{python3_sitelib}/%{srcname}-*.egg-info/
@@ -56,7 +52,7 @@ BuildRequires:  python%{python3_pkgversion}-devel
 
 %changelog
 * Tue Dec 24 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 3.1.1-0
-- Activate epel-rpm-macros and python3_pkgversion for RHEL use
+- Backport to RHEL 8
 
 * Thu Oct 03 2019 Miro Hrončok <mhroncok@redhat.com> - 3.1.1-4
 - Rebuilt for Python 3.8.0rc1 (#1748018)

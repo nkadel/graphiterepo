@@ -13,9 +13,6 @@ URL:           https://github.com/ActiveState/appdirs
 Source0:       %{pypi_source}
 
 BuildArch:     noarch
-%if 0%{?rhel}
-BuildRequires: epel-rpm-macros
-%endif
 
 %description
 A small Python module for determining appropriate " + " platform-specific
@@ -35,17 +32,17 @@ BuildRequires:  python2-wheel
 A small Python 2 module for determining appropriate " + " platform-specific
 directories, e.g. a "user data dir".
 
-%package -n python%{python3_pkgversion}-%{pypi_name}
+%package -n python3-%{pypi_name}
 Summary:        %{summary}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
+%{?python_provide:%python_provide python3-%{pypi_name}}
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
 %if %{with wheel}
-BuildRequires:  python%{python3_pkgversion}-pip
-BuildRequires:  python%{python3_pkgversion}-wheel
+BuildRequires:  python3-pip
+BuildRequires:  python3-wheel
 %endif
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
+%description -n python3-%{pypi_name}
 A small Python 3 module for determining appropriate " + " platform-specific
 directories, e.g. a "user data dir".
 
@@ -82,7 +79,7 @@ sed -i -e '1{\@^#!/usr/bin/env python@d}' %{buildroot}{%{python2_sitelib},%{pyth
 %doc README.rst CHANGES.rst
 %{python2_sitelib}/%{pypi_name}*
 
-%files -n python%{python3_pkgversion}-%{pypi_name}
+%files -n python3-%{pypi_name}
 %license LICENSE.txt
 %doc README.rst CHANGES.rst
 %{python3_sitelib}/%{pypi_name}*

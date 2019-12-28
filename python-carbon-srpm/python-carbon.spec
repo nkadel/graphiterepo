@@ -45,31 +45,31 @@ receiving metrics over the network and writing them down to disk using
 a storage back-end.
 
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n python3-%{srcname}
 Summary:        %{sum}
-BuildRequires:  python%{python3_pkgversion}-cachetools
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-mock
-BuildRequires:  python%{python3_pkgversion}-protobuf
-BuildRequires:  python%{python3_pkgversion}-twisted
-BuildRequires:  python%{python3_pkgversion}-whisper
+BuildRequires:  python3-cachetools
+BuildRequires:  python3-devel
+BuildRequires:  python3-mock
+BuildRequires:  python3-protobuf
+BuildRequires:  python3-twisted
+BuildRequires:  python3-whisper
 
-Requires:       python%{python3_pkgversion}-cachetools
-Requires:       python%{python3_pkgversion}-twisted
-Requires:       python%{python3_pkgversion}-twisted-core
-Requires:       python%{python3_pkgversion}-protobuf
-Requires:       python%{python3_pkgversion}-six
-Requires:       python%{python3_pkgversion}-whisper >= %{version}
+Requires:       python3-cachetools
+Requires:       python3-twisted
+Requires:       python3-twisted-core
+Requires:       python3-protobuf
+Requires:       python3-six
+Requires:       python3-whisper >= %{version}
 Requires(pre):  shadow-utils
 
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
 
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+%{?python_provide:%python_provide python3-%{srcname}}
 
 
-%description -n python%{python3_pkgversion}-%{srcname}
+%description -n python3-%{srcname}
 Carbon is one of the components of Graphite, and is responsible for
 receiving metrics over the network and writing them down to disk using
 a storage back-end.
@@ -127,7 +127,7 @@ install -D -p -m0644 %{SOURCE14} %{buildroot}%{_mandir}/man1
 # log files
 mkdir -p %{buildroot}%{_localstatedir}/log/carbon
 install -D -p -m0644 %{SOURCE20} \
-    %{buildroot}%{_sysconfdir}/logrotate.d/python%{python3_pkgversion}-%{srcname}
+    %{buildroot}%{_sysconfdir}/logrotate.d/python3-%{srcname}
 
 # init scripts
 install -D -p -m0644 %{SOURCE30} \
@@ -153,26 +153,26 @@ chmod 755 %{buildroot}%{python3_sitelib}/carbon/amqp_listener.py
 chmod 755 %{buildroot}%{python3_sitelib}/carbon/amqp_publisher.py
 
 
-%pre -n python%{python3_pkgversion}-%{srcname}
+%pre -n python3-%{srcname}
 getent group carbon >/dev/null || groupadd -r carbon
 getent passwd carbon >/dev/null || \
     useradd -r -g carbon -d %{_localstatedir}/lib/carbon \
     -s /sbin/nologin -c "Carbon cache daemon" carbon
 
 
-%post -n python%{python3_pkgversion}-%{srcname}
+%post -n python3-%{srcname}
 %systemd_post carbon-aggregator.service
 %systemd_post carbon-cache.service
 %systemd_post carbon-relay.service
 
 
-%preun -n python%{python3_pkgversion}-%{srcname}
+%preun -n python3-%{srcname}
 %systemd_preun carbon-aggregator.service
 %systemd_preun carbon-cache.service
 %systemd_preun carbon-relay.service
 
 
-%postun -n python%{python3_pkgversion}-%{srcname}
+%postun -n python3-%{srcname}
 %systemd_postun_with_restart carbon-aggregator.service
 %systemd_postun_with_restart carbon-cache.service
 %systemd_postun_with_restart carbon-relay.service
@@ -182,7 +182,7 @@ getent passwd carbon >/dev/null || \
 PYTHONPATH=lib trial-3 carbon
 
 
-%files -n python%{python3_pkgversion}-%{srcname}
+%files -n python3-%{srcname}
 %license LICENSE
 %doc README.md
 %doc conf/ examples/ distro/redhat/init.d/
@@ -196,7 +196,7 @@ PYTHONPATH=lib trial-3 carbon
 %config(noreplace) %{_sysconfdir}/carbon/storage-aggregation.conf
 %config(noreplace) %{_sysconfdir}/carbon/storage-schemas.conf
 
-%config(noreplace) %{_sysconfdir}/logrotate.d/python%{python3_pkgversion}-%{srcname}
+%config(noreplace) %{_sysconfdir}/logrotate.d/python3-%{srcname}
 
 %attr(0755,carbon,carbon) %dir %{_localstatedir}/lib/carbon
 %attr(0755,carbon,carbon) %dir %{_localstatedir}/lib/carbon/lists

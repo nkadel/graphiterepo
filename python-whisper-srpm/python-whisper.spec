@@ -50,16 +50,16 @@ Conflicts:      python-%{srcname}
 Python2 version of the Graphite whisper module
 
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n python3-%{srcname}
 Summary:        %{sum}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-mock
-BuildRequires:  python%{python3_pkgversion}-setuptools
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+BuildRequires:  python3-devel
+BuildRequires:  python3-mock
+BuildRequires:  python3-setuptools
+%{?python_provide:%python_provide python3-%{srcname}}
 
 
-%description -n python%{python3_pkgversion}-%{srcname}
-Python%{python3_pkgversion} version of the Graphite whisper module
+%description -n python3-%{srcname}
+Python3 version of the Graphite whisper module
 
 
 %prep
@@ -84,8 +84,8 @@ popd
 # remove .py suffix
 pushd %{buildroot}%{_bindir}
 for i in *.py; do
-    mv ${i} ${i%%.py}-%{python3_pkgversion}
-    ln -s ${i%%.py}-%{python3_pkgversion} ${i%%.py}
+    mv ${i} ${i%%.py}-3
+    ln -s ${i%%.py}-3 ${i%%.py}
 done
 popd
 
@@ -142,28 +142,28 @@ install -D -p -m0644 %{SOURCE19} %{buildroot}%{_mandir}/man1
 #%{_mandir}/man1/whisper-set-aggregation-method.1*
 #%{_mandir}/man1/whisper-update.1*
 
-%files -n python%{python3_pkgversion}-%{srcname}
+%files -n python3-%{srcname}
 %license LICENSE
 %doc README.md
 %{python3_sitelib}/whisper.py*
 %{python3_sitelib}/whisper-*-py?.?.egg-info
 %{python3_sitelib}/__pycache__/*
-%{_bindir}/find-corrupt-whisper-files-%{python3_pkgversion}
-%{_bindir}/rrd2whisper-%{python3_pkgversion}
-%{_bindir}/update-storage-times-%{python3_pkgversion}
-%{_bindir}/whisper-auto-resize-%{python3_pkgversion}
-%{_bindir}/whisper-auto-update-%{python3_pkgversion}
-%{_bindir}/whisper-create-%{python3_pkgversion}
-%{_bindir}/whisper-dump-%{python3_pkgversion}
-%{_bindir}/whisper-diff-%{python3_pkgversion}
-%{_bindir}/whisper-fetch-%{python3_pkgversion}
-%{_bindir}/whisper-fill-%{python3_pkgversion}
-%{_bindir}/whisper-info-%{python3_pkgversion}
-%{_bindir}/whisper-merge-%{python3_pkgversion}
-%{_bindir}/whisper-resize-%{python3_pkgversion}
-%{_bindir}/whisper-set-aggregation-method-%{python3_pkgversion}
-%{_bindir}/whisper-set-xfilesfactor-%{python3_pkgversion}
-%{_bindir}/whisper-update-%{python3_pkgversion}
+%{_bindir}/find-corrupt-whisper-files-3
+%{_bindir}/rrd2whisper-3
+%{_bindir}/update-storage-times-3
+%{_bindir}/whisper-auto-resize-3
+%{_bindir}/whisper-auto-update-3
+%{_bindir}/whisper-create-3
+%{_bindir}/whisper-dump-3
+%{_bindir}/whisper-diff-3
+%{_bindir}/whisper-fetch-3
+%{_bindir}/whisper-fill-3
+%{_bindir}/whisper-info-3
+%{_bindir}/whisper-merge-3
+%{_bindir}/whisper-resize-3
+%{_bindir}/whisper-set-aggregation-method-3
+%{_bindir}/whisper-set-xfilesfactor-3
+%{_bindir}/whisper-update-3
 
 %{_bindir}/find-corrupt-whisper-files
 %{_bindir}/rrd2whisper
